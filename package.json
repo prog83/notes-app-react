@@ -1,0 +1,40 @@
+{
+  "name": "notes-app-react",
+  "version": "0.1.0",
+  "description": "Notes App",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.27",
+    "eslint": "8.0.0",
+    "eslint-config-next": "11.1.2",
+    "typescript": "4.4.3"
+  },
+  "author": "o.myronov",
+  "license": "MIT",
+  "homepage": "https://github.com/prog83/notes-app-react",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prog83/notes-app-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prog83/notes-app-react/issues"
+  },
+  "keywords": [
+    "react",
+    "Next.js",
+    "Typescript",
+    "Material-UI",
+    "note"
+  ]
+}
