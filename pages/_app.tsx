@@ -1,5 +1,4 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import type {
@@ -9,9 +8,6 @@ import type {
 import Head from 'next/head';
 
 import { Provider } from 'react-redux';
-
-import Favicon from '@/components/Favicon';
-import Font from '@/components/Font';
 
 import useStore from '@/store/store';
 
@@ -28,8 +24,14 @@ const WrappedApp = ({ Component, pageProps }: AppProps) => {
         <title>Notes App</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
 
-        <Favicon />
-        <Font />
+        <link rel="icon" href="/favicon.ico" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Material+Icons&display=swap"
+        />
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />

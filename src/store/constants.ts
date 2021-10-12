@@ -1,17 +1,8 @@
 // REDUX ACTION TYPES
-export const PRELOADER_SET = 'preloader/set';
-export const LOADER_SET = 'loader/set';
-export const SNACKBAR_SET = 'snackbar/set';
-export const CONFIRMDIALOG_SET = 'confirmDialog/set';
-export const ERROR_SET = 'error/set';
-export const ERROR_RESET = 'error/reset';
-export const MAINMENU_SET = 'mainMenu/set';
-export const BIRTHPOSITION_SET = 'birthPosition/set';
-export const RESIDENCEPOSITION_SET = 'residencePosition/set';
-export const COMMISSIONPOSITION_SET = 'commissionPosition/set';
-export const ACCOUNT_RECEIVED = 'account/received';
-export const FAQ_SET = 'faq/set';
-export const VIEWID_SET = 'viewId/set';
-export const PRINTID_SET = 'printId/set';
-export const SEARCH_SET = 'search/set';
-export const SEARCH_RESET = 'search/reset';
+export const NOTES_INIT = 'notes/init';
+export const MODE_ARCHIVED = 'mode/archived';
+export const NOTE_CREATE = 'note/create';
+export const NOTE_UPDATE = 'note/update';
+export const NOTE_DELETE = 'note/delete';
+export const NOTE_ARCHIVE = 'note/archive';
+export const NOTE_UNARCHIVE = 'note/unarchive';

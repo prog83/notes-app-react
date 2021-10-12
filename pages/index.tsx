@@ -1,13 +1,7 @@
-import type { NextPage } from 'next';
+import React from 'react';
 
-const Home: NextPage = () => {
-  return (
-    <main>
-      <h1>
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
-    </main>
-  );
-};
+import App from '@/components/App';
 
-export default Home;
+const Page = () => <App />;
+
+export default Page;
