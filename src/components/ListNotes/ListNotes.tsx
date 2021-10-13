@@ -1,10 +1,11 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
+import Button from '@material-ui/core/Button';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,13 +13,14 @@ import TableRow from '@/components/Table/TableRow';
 import TableCell from '@/components/Table/TableCell';
 import IconButton from '@/components/IconButton';
 
-import { notesSelector, modeArchivedSelector } from '@/store/selectors';
-import { setModeActived, archiveNote, unarchiveNote, deleteNote } from '@/store/actions';
+import { listNotesSelector, modeArchivedSelector } from '@/store/selectors';
+import { setModeActived } from '@/store/actions';
 import { getIconArchived } from '@/helpers';
 
 import { HeadCells } from '@/helpers/types';
 
 import ListItemNotes from './ListItemNotes';
+import NoteDialog, { NoteDialogProvider, NoteDialog as NoteDialogState } from './NoteDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
     headIcon: {
       color: theme.palette.common.white,
     },
+    createNoteButton: {
+      marginTop: theme.spacing(2),
+      marginLeft: 'auto',
+    },
   }),
 );
 
@@ -61,12 +67,20 @@ const headCells: Array<HeadCells> = [
 const ListNotes = () => {
   const classes = useStyles();
 
+  const [noteDialog, setNoteDialog] = useState<NoteDialogState>({ open: false });
+
   const dispatch = useDispatch();
 
-  const notes = useSelector(notesSelector);
+  const notes = useSelector(listNotesSelector);
   const modeArchived = useSelector(modeArchivedSelector);
 
-  const filteredNotes = notes.filter(({ archived = false }) => archived === modeArchived);
+  const handleOpen = useCallback(() => {
+    setNoteDialog({ open: true });
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setNoteDialog({ open: false });
+  }, []);
 
   const handleModeArchived = useCallback(() => {
     dispatch(setModeActived(!modeArchived));
@@ -76,47 +90,41 @@ const ListNotes = () => {
     console.log('Opps!');
   }, []);
 
-  const handleArchive = useCallback((id: string, archived: boolean) => {
-    if (archived) {
-      dispatch(archiveNote(id));
-    }
-    if (!archived) {
-      dispatch(unarchiveNote(id));
-    }
-  }, []);
-
-  const handleDelete = useCallback((id: string) => {
-    dispatch(deleteNote(id));
-  }, []);
-
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            {headCells.map(({ text, align }) => (
-              <TableCell key={text} align={align}>
-                {text}
+    <NoteDialogProvider value={setNoteDialog}>
+      <NoteDialog onClose={handleClose} {...noteDialog} />
+      <TableContainer component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              {headCells.map(({ text, align }) => (
+                <TableCell key={text} align={align}>
+                  {text}
+                </TableCell>
+              ))}
+              <TableCell>
+                <IconButton iconClassName={classes.headIcon} onClick={handleModeArchived}>
+                  {getIconArchived(modeArchived)}
+                </IconButton>
+                <IconButton iconClassName={classes.headIcon} onClick={handleHeadDelete}>
+                  delete
+                </IconButton>
               </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {notes.map((note) => (
+              <ListItemNotes key={note.id} {...note} />
             ))}
-            <TableCell>
-              <IconButton iconClassName={classes.headIcon} onClick={handleModeArchived}>
-                {getIconArchived(modeArchived)}
-              </IconButton>
-              <IconButton iconClassName={classes.headIcon} onClick={handleHeadDelete}>
-                delete
-              </IconButton>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredNotes.map((note) => (
-            <ListItemNotes key={note.id} {...note} onArchive={handleArchive} onDelete={handleDelete} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button variant="contained" color="primary" onClick={handleOpen} className={classes.createNoteButton}>
+        Create Note
+      </Button>
+    </NoteDialogProvider>
   );
 };
 

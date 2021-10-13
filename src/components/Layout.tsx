@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -26,4 +26,4 @@ const Layout = ({ children }: React.PropsWithChildren<{}>) => {
   );
 };
 
-export default memo(Layout);
+export default Layout;

@@ -63,16 +63,26 @@ export const groupBy = (array: Array<Record<string, any>>, key: string) =>
     return rslt;
   }, {});
 
-export const searchDatesFromText = (text: string) => {
-  const rslt = [];
-  const re = /(?:\d{1,2}\/\d{1,2}\/\d{4})|(?:\d{1,2}\-\d{1,2}\-\d{4})|(?:\d{1,2}\.\d{1,2}\.\d{4})/g;
+export const getSortedSummaryNotes = (notes: Array<Note>, field: Extract<keyof Note, 'category'>) => {
+  const summary = groupBy(notes, field);
+  return Object.entries(summary).sort((a, b) => {
+    const countA = a[1].length;
+    const countB = b[1].length;
+    return countB - countA;
+  });
+};
 
+export const searchDatesFromText = (text?: string) => {
+  if (!text) {
+    return [];
+  }
+
+  const rslt: Array<string> = [];
+  const re = /(?:\d{1,2}\/\d{1,2}\/\d{4})|(?:\d{1,2}\-\d{1,2}\-\d{4})|(?:\d{1,2}\.\d{1,2}\.\d{4})/g;
   let date = null;
   while ((date = re.exec(text)) !== null) {
     rslt.push(date[0]);
-    // TODO delete
-    // re.lastIndex;
   }
 
-  return rslt.map((dt) => (Date.parse(dt) ? new Date(dt) : null)).filter((i) => i);
+  return rslt.map((dt) => (Date.parse(dt) ? new Date(dt) : null)).filter((i) => Boolean(i)) as Array<Date>;
 };

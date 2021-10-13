@@ -1,5 +1,6 @@
 import React, { memo, useCallback } from 'react';
 
+import { useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 
 import TableRow from '@/components/Table/TableRow';
@@ -8,33 +9,37 @@ import IconButton from '@/components/IconButton';
 
 import { getCategoryAvatar, getIconArchived } from '@/helpers';
 
+import { archiveNote, unarchiveNote, deleteNote } from '@/store/actions';
 import { Note } from '@/store/types';
 
-interface Props extends Note {
-  onArchive: (id: string, archived: boolean) => void;
-  onDelete: (id: string) => void;
-}
+import { useNoteDialog } from './NoteDialog';
 
-const ListItemNotes = ({
-  id,
-  name,
-  created,
-  category,
-  content,
-  dates,
-  archived = false,
-  onArchive,
-  onDelete,
-}: Props) => {
+interface Props extends Note {}
+
+const ListItemNotes = (props: Props) => {
+  const { id, name, created, category, content, dates, archived = false } = props;
+  const dispatch = useDispatch();
+
+  const noteDialog = useNoteDialog();
+
   const createdText = format(created, 'MMMM dd, yyyy');
   const datesText = dates?.map((date) => format(date, 'M/d/yyyy')).join(', ');
 
+  const handleEdit = useCallback(() => {
+    noteDialog({ open: true, value: props });
+  }, [props]);
+
   const handleArchive = useCallback(() => {
-    onArchive(id, !archived);
+    if (!archived) {
+      dispatch(archiveNote(id));
+    }
+    if (archived) {
+      dispatch(unarchiveNote(id));
+    }
   }, [id, archived]);
 
   const handleDelete = useCallback(() => {
-    onDelete(id);
+    dispatch(deleteNote(id));
   }, [id]);
 
   return (
@@ -46,7 +51,7 @@ const ListItemNotes = ({
       <TableCell>{content}</TableCell>
       <TableCell>{datesText}</TableCell>
       <TableCell>
-        <IconButton>edit</IconButton>
+        <IconButton onClick={handleEdit}>edit</IconButton>
         <IconButton onClick={handleArchive}>{getIconArchived(archived)}</IconButton>
         <IconButton onClick={handleDelete}>delete</IconButton>
       </TableCell>

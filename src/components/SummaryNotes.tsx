@@ -11,10 +11,9 @@ import { useSelector } from 'react-redux';
 import TableRow from '@/components/Table/TableRow';
 import TableCell from '@/components/Table/TableCell';
 
-import { notesSelector } from '@/store/selectors';
-import { groupBy, getCategoryAvatar } from '@/helpers';
+import { summaryNotesSelector } from '@/store/selectors';
+import { getCategoryAvatar } from '@/helpers';
 
-import { Note } from '@/store/types';
 import { HeadCells } from '@/helpers/types';
 
 const useStyles = makeStyles({
@@ -37,15 +36,6 @@ const useStyles = makeStyles({
 
 const headCells: Array<HeadCells> = [{ text: 'Note Category' }, { text: 'Active' }, { text: 'Archived' }];
 
-const getSortedSummaryNotes = (notes: Array<Note>, field: Extract<keyof Note, 'category'>) => {
-  const summary = groupBy(notes, field);
-  return Object.entries(summary).sort((a, b) => {
-    const countA = a[1].length;
-    const countB = b[1].length;
-    return countB - countA;
-  });
-};
-
 interface Props {
   className?: string;
 }
@@ -53,9 +43,7 @@ interface Props {
 const SummaryNotes = ({ className }: Props) => {
   const classes = useStyles();
 
-  const notes = useSelector(notesSelector);
-  const sortedSummary = getSortedSummaryNotes(notes, 'category');
-  console.log('test reselect', sortedSummary);
+  const summary = useSelector(summaryNotesSelector);
 
   return (
     <TableContainer component={Paper} className={className}>
@@ -71,7 +59,7 @@ const SummaryNotes = ({ className }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedSummary.map(([category, array]) => {
+          {summary.map(([category, array]) => {
             const countActive = array.filter(({ archived }) => !archived).length;
             const countArchived = array.length - countActive;
 

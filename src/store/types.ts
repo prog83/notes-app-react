@@ -4,7 +4,6 @@ export interface Note {
   id: string;
   name: string;
   created: Date;
-  // TODO
   category: string;
   content?: string;
   dates?: Array<Date> | null;
