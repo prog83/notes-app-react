@@ -4,7 +4,7 @@
     "es6": true,
     "node": true
   },
-  "extends": ["airbnb-typescript", "airbnb/hooks", "plugin:prettier/recommended"],
+  "extends": ["airbnb-typescript", "airbnb/hooks", "plugin:prettier/recommended", "next"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
