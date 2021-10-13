@@ -55,13 +55,16 @@ export const getCategoryAvatar = (value: string) => {
 
 export const getIconArchived = (archived: boolean = false) => (archived ? 'unarchive' : 'archive');
 
-// TODO: typed correct with guard
-export const groupBy = (array: Array<Record<string, any>>, key: string) =>
-  array.reduce((acc: Record<string, Array<any>>, item) => {
+type KeysMatching<T, V> = {
+  [K in keyof T]-?: T[K] extends V ? K : never;
+}[keyof T];
+
+export const groupBy = <T extends {}, Key extends KeysMatching<T, string>>(array: Array<T>, key: Key) =>
+  array.reduce<Record<Key, Array<T>>>((acc, item) => {
     const rslt = { ...acc };
     (rslt[item[key]] = rslt[item[key]] ?? []).push(item);
     return rslt;
-  }, {});
+  }, {} as Record<Key, Array<T>>);
 
 export const getSortedSummaryNotes = (notes: Array<Note>, field: Extract<keyof Note, 'category'>) => {
   const summary = groupBy(notes, field);
