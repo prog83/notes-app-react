@@ -1,4 +1,3 @@
-// REDUX ACTION TYPES
 export const NOTES_INIT = 'notes/init';
 export const MODE_ARCHIVED = 'mode/archived';
 export const NOTE_CREATE = 'note/create';
