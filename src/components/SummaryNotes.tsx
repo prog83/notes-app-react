@@ -1,24 +1,16 @@
 import React, { memo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
+import clsx from 'clsx';
 
 import { useSelector } from 'react-redux';
 
-import TableRow from '@/components/Table/TableRow';
-import TableCell from '@/components/Table/TableCell';
+import DataGrid, { Column } from '@/components/Table/DataGrid';
 
 import { summaryNotesSelector } from '@/store/selectors';
-import { getCategoryAvatar } from '@/helpers';
-
-import { HeadCells } from '@/helpers/types';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: 750,
     '& thead > tr > *': {
       '&:nth-child(1)': {
         width: 60,
@@ -34,7 +26,12 @@ const useStyles = makeStyles({
   },
 });
 
-const headCells: Array<HeadCells> = [{ text: 'Note Category' }, { text: 'Active' }, { text: 'Archived' }];
+const columns: Array<Column> = [
+  { field: 'avatar' },
+  { field: 'category', label: 'Note Category' },
+  { field: 'active', label: 'Active' },
+  { field: 'archived', label: 'Archived' },
+];
 
 interface Props {
   className?: string;
@@ -42,40 +39,9 @@ interface Props {
 
 const SummaryNotes = ({ className }: Props) => {
   const classes = useStyles();
+  const rows = useSelector(summaryNotesSelector);
 
-  const summary = useSelector(summaryNotesSelector);
-
-  return (
-    <TableContainer component={Paper} className={className}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            {headCells.map(({ text, align }) => (
-              <TableCell key={text} align={align}>
-                {text}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {summary.map(([category, array]) => {
-            const countActive = array.filter(({ archived }) => !archived).length;
-            const countArchived = array.length - countActive;
-
-            return (
-              <TableRow key={category} hover>
-                <TableCell>{getCategoryAvatar(category)}</TableCell>
-                <TableCell>{category}</TableCell>
-                <TableCell>{countActive}</TableCell>
-                <TableCell>{countArchived}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+  return <DataGrid columns={columns} rows={rows} className={clsx(classes.table, className)} />;
 };
 
 export default memo(SummaryNotes);

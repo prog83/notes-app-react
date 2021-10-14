@@ -56,7 +56,7 @@ export const getCategoryAvatar = (value: string) => {
 export const getIconArchived = (archived: boolean = false) => (archived ? 'unarchive' : 'archive');
 
 type KeysMatching<T, V> = {
-  [K in keyof T]-?: T[K] extends V ? K : never;
+  [K in keyof T]: T[K] extends V ? K : never;
 }[keyof T];
 
 export const groupBy = <T extends {}, Key extends KeysMatching<T, string>>(array: Array<T>, key: Key) =>
@@ -65,15 +65,6 @@ export const groupBy = <T extends {}, Key extends KeysMatching<T, string>>(array
     (rslt[item[key]] = rslt[item[key]] ?? []).push(item);
     return rslt;
   }, {} as Record<Key, Array<T>>);
-
-export const getSortedSummaryNotes = (notes: Array<Note>, field: Extract<keyof Note, 'category'>) => {
-  const summary = groupBy(notes, field);
-  return Object.entries(summary).sort((a, b) => {
-    const countA = a[1].length;
-    const countB = b[1].length;
-    return countB - countA;
-  });
-};
 
 export const searchDatesFromText = (text?: string) => {
   if (!text) {
