@@ -1,5 +1,5 @@
 import * as constants from './constants';
-import { Note, RootActions } from './types';
+import type { Note, RootActions } from './types';
 
 export const initNotes = (value: Array<Note>): RootActions => ({
   type: constants.NOTES_INIT,
